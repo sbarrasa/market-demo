@@ -41,8 +41,8 @@ public class ProductsController {
 		
 	}
 
-	@RequestMapping(path = "/view/products", method = RequestMethod.GET)
-	public ModelAndView productsView(@RequestParam(required = false) Optional<Integer> page,
+	@RequestMapping(path = "/view", method = RequestMethod.GET)
+	public ModelAndView view(@RequestParam(required = false) Optional<Integer> page,
 							   @RequestParam(required = false) Optional<Integer> size) {
 
 		ModelAndView mav = new ModelAndView();
@@ -59,8 +59,8 @@ public class ProductsController {
 		return mav;
 	}
 
-	@GetMapping("/view/product/{id}")
-	public ModelAndView productView(@PathVariable Long id) {
+	@GetMapping("/view/{id}")
+	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 
 		mav.addObject("product", productsRepository.findById(id).get());

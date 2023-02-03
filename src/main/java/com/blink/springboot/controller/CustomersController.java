@@ -11,6 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.blink.mediamanager.MediaTemplate;
 import com.blink.springboot.entities.Customer;
 import com.blink.springboot.entities.Sex;
 import com.blink.springboot.services.CustomersService;
@@ -26,8 +27,8 @@ public class CustomersController {
 	private CustomersService customersManager;
 
 
-	@GetMapping("/view/customer/{id}")
-	public ModelAndView customerView(@PathVariable Long id) {
+	@GetMapping("/view/{id}")
+	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 
 	    mav.addObject("customer", customersManager.get(id));
@@ -36,8 +37,8 @@ public class CustomersController {
         return mav;
 	}
 	
-	@GetMapping(value = "/view/customers")
-	public ModelAndView customersView(@RequestParam(required = false) List<String> orderBy) {
+	@GetMapping(value = "/view/")
+	public ModelAndView view(@RequestParam(required = false) List<String> orderBy) {
 		
 		ModelAndView mav = new ModelAndView();
 		

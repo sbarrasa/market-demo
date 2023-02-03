@@ -1,6 +1,5 @@
 package com.blink.springboot.config;
 
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -9,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import com.blink.mediamanager.MediaError;
 import com.blink.mediamanager.MediaTemplate;
 import com.blink.mediamanager.local.MediaLocal;
+import com.blink.mediamanager.s3.MediaS3;
 
 @Configuration
 public class MediaConfig {
@@ -20,6 +20,23 @@ public class MediaConfig {
 	public MediaLocal localMedia() {
 		return new MediaLocal();
 	}
+	
+	@SuppressWarnings("static-method")
+	@Bean
+    public MediaS3 s3(@Value("${aws.access.key.id}") String accessKey,
+    	    @Value("${aws.secret.access.key}") String secretKey,
+    	    @Value("${aws.s3.region}") String region,
+    	    @Value("${aws.s3.bucket.name}") String bucket,
+    	    @Value("${com.blink.mediamanager.path}") String path) {
+
+		return new MediaS3()
+					.setAccessKey(accessKey)
+					.setSecretKey(secretKey)
+					.setBucket(bucket)
+					.setRegion(region)
+					.setPath(path);
+		
+		}
 	
 	
 	
