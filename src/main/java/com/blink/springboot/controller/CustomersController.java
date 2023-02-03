@@ -30,8 +30,10 @@ public class CustomersController {
 	@GetMapping("/view/{id}")
 	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
-
+		Customer customer = customersManager.get(id);
 	    mav.addObject("customer", customersManager.get(id));
+	    mav.addObject("avatar", mediaTemplate.getURL(customer.getImageId()));
+   
 	    mav.setViewName("customer");
 
         return mav;

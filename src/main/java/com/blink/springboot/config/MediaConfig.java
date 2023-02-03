@@ -41,11 +41,12 @@ public class MediaConfig {
 	
 	
 	@Bean 
-	public MediaTemplate mediaTemplate(@Value("${com.blink.mediamanager.class}") String className) {
+	public MediaTemplate mediaTemplate(@Value("${com.blink.mediamanager.class}") String className,
+										@Value("${com.blink.mediamanager.path}") String path)  {
 		try {
-			
-			return (MediaTemplate) applicationContext.getBean(Class.forName(className));
-			
+			MediaTemplate mediaTemplate = (MediaTemplate) applicationContext.getBean(Class.forName(className));
+			mediaTemplate.setPath(path);
+			return mediaTemplate;
 		} catch (Exception e) {
 			throw new MediaError(String.format("Error when trying to instantiate MediaTemplate class %s", className));
 		}

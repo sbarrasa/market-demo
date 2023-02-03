@@ -6,6 +6,7 @@
 </head>
 <body>
 	Customer ID: <span th:text="${customer.id}"/>
+	<br/><img th:alt="${customer.id}" th:src="${avatar}"/>
 	<br/>Names: <span th:text="${customer.names}"/>
 	<br/>Lastnames: <span th:text="${customer.lastNames}"/>
 	<br/>Age: <span th:text="${customer.age}"/>
