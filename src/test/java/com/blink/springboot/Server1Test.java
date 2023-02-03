@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.blink.springboot.entities.Customer;
-import com.blink.springboot.services.CustomersManager;
+import com.blink.springboot.services.CustomersService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -23,7 +23,7 @@ public class Server1Test {
     private WebTestClient webClient;
 
    	@Autowired
-	private CustomersManager customersManager;
+	private CustomersService customersManager;
 
    	private Long customerIdTest = 1l;
 

@@ -1,7 +1,6 @@
 package com.blink.springboot.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -10,25 +9,21 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.blink.springboot.entities.Customer;
 import com.blink.springboot.entities.Sex;
-import com.blink.springboot.services.CustomersManager;
+import com.blink.springboot.services.CustomersService;
 
 @RestController
 @RequestMapping("/customers")
 public class CustomersController {
 
-	@Value("${kafka.topic.name}") 
-	private String kafkaTopic;
-
 	
 	@Autowired
-	private CustomersManager customersManager;
+	private CustomersService customersManager;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	

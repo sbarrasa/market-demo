@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import com.blink.springboot.entities.Views;
 import com.blink.springboot.entities.ProductOrdered;
 import com.blink.springboot.entities.Order;
-import com.blink.springboot.services.OrdersManager;
+import com.blink.springboot.services.OrdersService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping("/orders")
 public class OrdersController {
 	@Autowired 
-	private OrdersManager ordersManager;
+	private OrdersService ordersManager;
 	
 			
 	@RequestMapping(path = "/all", method = RequestMethod.GET)

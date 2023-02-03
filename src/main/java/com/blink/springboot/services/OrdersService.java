@@ -17,7 +17,7 @@ import com.blink.springboot.entities.Product;
 import com.blink.springboot.entities.ProductOrdered;
 
 @Service
-public class OrdersManager {
+public class OrdersService {
 	@Autowired
 	public OrdersRepository ordersRepository;
 

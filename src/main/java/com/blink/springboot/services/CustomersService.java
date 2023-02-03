@@ -25,7 +25,7 @@ import com.blink.springboot.entities.Customer;
 import com.blink.springboot.entities.Sex;
 
 @Service
-public class CustomersManager {
+public class CustomersService {
 	@Autowired
 	private CustomersRepository customersRepository;
 
