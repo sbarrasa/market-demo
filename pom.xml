@@ -135,14 +135,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-<<<<<<< Upstream, based on branch 'master' of git@github.com:sbarrasa/market-demo.git
-=======
 		<dependency>
 		    <groupId>com.github.sbarrasa</groupId>
 		    <artifactId>media-base</artifactId>
 		    <version>1.0.0</version>
 		</dependency> 
->>>>>>> 4508b15 ppp
 
 	</dependencies>
 
@@ -169,10 +166,6 @@
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
-		</repository>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
 		</repository>
 		<repository>
 			<id>spring-snapshots</id>
