@@ -33,8 +33,8 @@ public class CustomersController {
 	
 
 
-	@GetMapping("/view/{id}")
-	public ModelAndView view(@PathVariable Long id) {
+	@GetMapping("/view/customer/{id}")
+	public ModelAndView customerView(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 
 	    mav.addObject("customer", customersManager.get(id));
@@ -43,8 +43,8 @@ public class CustomersController {
         return mav;
 	}
 	
-	@GetMapping(value = "/view")
-	public ModelAndView viewAll(@RequestParam(required = false) List<String> orderBy) {
+	@GetMapping(value = "/view/customers")
+	public ModelAndView customersView(@RequestParam(required = false) List<String> orderBy) {
 		
 		ModelAndView mav = new ModelAndView();
 		
