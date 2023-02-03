@@ -63,7 +63,7 @@ public class ProductsController {
 	public ModelAndView productView(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("product", productsRepository.findById(id));
+		mav.addObject("product", productsRepository.findById(id).get());
 		mav.setViewName("product");
 
 		return mav;
