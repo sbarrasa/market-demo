@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Customer</title>
+</head>
+<body>
+	Customer ID: <span th:text="${customer.id}"/>
+	<br/>Names: <span th:text="${customer.names}"/>
+	<br/>Lastnames: <span th:text="${customer.lastNames}"/>
+	<br/>Age: <span th:text="${customer.age}"/>
+	<br/>Birthday: <span th:text="${#temporals.format(customer.birthday, 'dd-MM-yyyy')}"/>
+	<br/>Sex: <span th:text="${customer.sex}"/>
+</body>
+</html>
