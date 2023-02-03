@@ -22,11 +22,11 @@
 		<tbody>
 			<tr th:each="product : ${products}">
 				<td th:text="${product.id}" />
-				<td th:text="${product.names}" />
-				<td th:text="${customer.description}" />
-				<td th:text="${customer.stock}" />
+				<td th:text="${product.name}" />
+				<td th:text="${product.description}" />
+				<td th:text="${product.stock}" />
 				<td th:text="${product.price}" />
-				<td th:text="${customer.id}" />
+				<td th:text="${product.id}" />
 			</tr>
 		</tbody>
 	</table>
