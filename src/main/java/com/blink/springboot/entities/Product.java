@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product implements EntityImage{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@JsonView({Views.Order.class, Views.ProductUpdate.class})

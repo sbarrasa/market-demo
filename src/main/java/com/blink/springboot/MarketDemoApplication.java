@@ -10,9 +10,9 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @EnableCaching
 @SpringBootApplication
-public class Application extends SpringApplication{
+public class MarketDemoApplication extends SpringApplication{
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(Application.class)
+		new SpringApplicationBuilder(MarketDemoApplication.class)
 			.properties(staticProperties())
 			.run(args);
 	}

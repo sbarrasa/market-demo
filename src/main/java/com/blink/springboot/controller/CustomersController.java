@@ -1,6 +1,7 @@
 package com.blink.springboot.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -70,7 +71,6 @@ public class CustomersController {
 	public Page<Customer> getAll(@RequestParam(required = false) Optional<Integer> page,
 			 				  @RequestParam(required = false) Optional<Integer> size,
 			 				  @RequestParam(required = false) List<String> orderFields) {
-		
 		
 		
 		return customersManager.getPaginated(page, size, orderFields);

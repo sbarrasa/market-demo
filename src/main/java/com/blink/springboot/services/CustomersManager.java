@@ -85,7 +85,8 @@ public class CustomersManager {
 	}
 
 	public Page<Customer> getPaginated(Optional<Integer> page, Optional<Integer> size, List<String> orderFields) {
-		if(orderFields.isEmpty())
+		if(orderFields == null
+		|| orderFields.isEmpty())
 			orderFields = Arrays.asList(defaultOrderFields);
 		
 		return customersRepository.findAll(PageRequest.of( 

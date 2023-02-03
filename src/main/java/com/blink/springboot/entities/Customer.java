@@ -37,7 +37,7 @@ import com.vladmihalcea.hibernate.type.json.JsonStringType;
     @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 })
 
-public class Customer implements Serializable {
+public class Customer implements Serializable, EntityImage {
 	private static final long serialVersionUID = 666L;
 
 	public Customer() {}
@@ -116,7 +116,7 @@ public class Customer implements Serializable {
 		return Period.between(birthday, LocalDate.now()).getYears();
 	}
 
-/*	public List<Customer> getChilds() {
+	public List<Customer> getChilds() {
 		return childs;
 	}
 
@@ -125,7 +125,6 @@ public class Customer implements Serializable {
 		return this;
 
 	}
-*/
 	public List<Specs> getSpecs() {
 		return this.specs;
 	}
