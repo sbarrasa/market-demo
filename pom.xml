@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>com.github.sbarrasa</groupId>
 			<artifactId>media-base</artifactId>
-			<version>master-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -135,11 +135,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<dependency>
-		    <groupId>com.github.sbarrasa</groupId>
-		    <artifactId>media-base</artifactId>
-		    <version>1.0.0</version>
-		</dependency> 
 
 	</dependencies>
 
