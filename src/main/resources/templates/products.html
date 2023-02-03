@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Products</title>
+</head>
+<body>
+	<h1>MarketDemo - Products</h1>
+
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>NAME</th>
+				<th>DESCRIPTION</th>
+				<th>STOCK</th>
+				<th>PRICE</th>
+				<th>THUMB</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="product : ${products}">
+				<td th:text="${product.id}" />
+				<td th:text="${product.names}" />
+				<td th:text="${customer.description}" />
+				<td th:text="${customer.stock}" />
+				<td th:text="${product.price}" />
+				<td th:text="${customer.id}" />
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

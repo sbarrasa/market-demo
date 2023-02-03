@@ -19,6 +19,7 @@ import com.blink.springboot.dao.ProductsRepository;
 import com.blink.springboot.entities.Product;
 import com.blink.springboot.entities.Views;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/products")
@@ -30,7 +31,7 @@ public class ProductsController {
 	public Page<Product> getAll(@RequestParam(required = false) Optional<Integer> page,
 			 				  @RequestParam(required = false) Optional<Integer> size) {
 		
-	
+
 		
 		return productsRepository.findAll(PageRequest.of( 
 										page.orElse(0), 
@@ -39,7 +40,36 @@ public class ProductsController {
 
 		
 	}
-	
+
+	@RequestMapping(path = "/view/products", method = RequestMethod.GET)
+	public ModelAndView productsView(@RequestParam(required = false) Optional<Integer> page,
+							   @RequestParam(required = false) Optional<Integer> size) {
+
+		ModelAndView mav = new ModelAndView();
+
+		mav.setViewName("products");
+
+		Page<Product> products = productsRepository.findAll(PageRequest.of(
+				page.orElse(0),
+				size.orElse(50),
+				Sort.by("id")));
+
+		mav.addObject("products", products);
+
+		return mav;
+	}
+
+	@GetMapping("/view/product/{id}")
+	public ModelAndView productView(@PathVariable Long id) {
+		ModelAndView mav = new ModelAndView();
+
+		mav.addObject("product", productsRepository.findById(id));
+		mav.setViewName("product");
+
+		return mav;
+	}
+
+
 	@GetMapping("/{id}")
 	public Product getById(@PathVariable Long id) {
 		return productsRepository.findById(id).orElseThrow();
