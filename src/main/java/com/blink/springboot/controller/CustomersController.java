@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.Random;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +18,12 @@ import com.blink.springboot.services.CustomersService;
 @RestController
 @RequestMapping("/customers")
 public class CustomersController {
-
+	@Autowired
+	MediaTemplate mediaTemplate;
+	
 	
 	@Autowired
 	private CustomersService customersManager;
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
-	
 
 
 	@GetMapping("/view/customer/{id}")
