@@ -1,23 +1,19 @@
 package com.blink.springboot.entities;
 
-//TODO: mover a MediaManager
-//TODO: resolver Static getImageId via reflection 
 public interface EntityImage {
 	public Object getId();
 	
-	static public String getImageId(Class<?> clazz, Object id) {
-		return clazz.getSimpleName()+"-"+id;
-	}
+	static public String getImageId(Class<?> clazz, Object id, String... sufixes) {
+		String sufix = "";
+		if(sufixes.length >0)
+			sufix = sufixes[0];
 
-	static public String getImageId(Class<?> clazz, Object id, String sufix) {
-		return getImageId(clazz, id)+sufix;
+		return clazz.getSimpleName()+"-"+id+sufix;
 	}
 	
-	default public String getImageId() {
-		return getImageId(getClass(), getId());
+	
+	default public String getImageId(String... sufixes) {
+		return getImageId(getClass(), getId(), sufixes);
 	}
 	
-	default public String getImageId(String sufix) {
-		return getImageId()+sufix;
-	}
 }

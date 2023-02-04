@@ -108,6 +108,10 @@ public class Product implements EntityImage{
 	public String toString() {
 		return String.format("#%d:%s stock:%d price:%,.2f", getId(), getName(), getStock(), getPrice());
 	}
+
+	public static String getImageId(Long id, String... sufix) {
+		return EntityImage.getImageId(Product.class, id, sufix);
+	}
 	
 	
 }

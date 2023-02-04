@@ -2,22 +2,21 @@ package com.blink.springboot.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.Optional;
 
 import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
 import com.blink.mediamanager.MediaTemplate;
+import com.blink.mediamanager.rest.MediaEndpoints;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.blink.springboot.entities.Customer;
 import com.blink.springboot.entities.Sex;
 import com.blink.springboot.services.CustomersService;
+
 
 @RestController
 @RequestMapping("/customers")
@@ -35,7 +35,7 @@ public class CustomersController {
 	@Autowired
 	private CustomersService customersService;
 
-	@GetMapping("/view/{id}")
+	@GetMapping("{id}/view/")
 	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 		Customer customer = customersService.get(id);
@@ -43,7 +43,7 @@ public class CustomersController {
 		mav.addObject("avatar", mediaTemplate.getURL(customer.getImageId()));
 
 		mav.setViewName("customer");
-
+		
 		return mav;
 	}
 
@@ -51,12 +51,14 @@ public class CustomersController {
 	public ModelAndView view(@RequestParam(required = false) List<String> orderBy) {
 
 		ModelAndView mav = new ModelAndView();
-
+		
 		mav.setViewName("customers");
 
 		List<Customer> customers = customersService.getAll(orderBy);
 
 		mav.addObject("customers", customers);
+		mav.addObject("mediaTemplate", mediaTemplate);
+		mav.addObject("ID_THUMBNAIL", ImageResizer.ID_THUMBNAIL);
 
 		return mav;
 	}
@@ -105,39 +107,46 @@ public class CustomersController {
 
 	}
 
-	@Async
 	@ResponseBody
-	@RequestMapping(path = "/img/upload/{id}", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<URL> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile) throws IOException, MediaException {
+	@RequestMapping(path = "/{id}/image/upload", 
+					method = RequestMethod.POST, 
+					consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public List<URL> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
+			throws IOException, MediaException {
 		Customer customer = customersService.get(id);
 
-		//TODO: ImageResizer debe tomar los widths defaults desde las properties				 
-		//TODO: ImageResizer debe no poner sufijo al primer elemento del resize 		
+		// TODO: ImageResizer debe tomar los widths defaults desde las properties
+		// TODO: ImageResizer debe no poner sufijo al primer elemento del resize
 
 		ImageResizer images = new ImageResizer(new Media()
-													.setId(customer.getImageId())
-													.setStream(multipartFile.getInputStream())
-													.setContentType(multipartFile.getContentType()));
-		
-		
-		
-		
+								.setId(customer.getImageId())
+								.setStream(multipartFile.getInputStream())
+								.setContentType(multipartFile.getContentType()));
+
 		mediaTemplate.upload(images.getResizes());
-		
+
 		return images.getURLs();
 	}
 
-
-	@GetMapping("image/{id}")
+	@GetMapping(value=("/{id}/image"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
-	public Media getImage(@PathVariable Long id) throws MediaException {
-		return mediaTemplate.get(customersService.get(id).getImageId());
+	public ResponseEntity<?> getImage(@PathVariable Long id) throws MediaException {
+		return getImage(Customer.getImageId(id));
+	}
+
+	@GetMapping(value=("/{id}/thumbnail"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<?> getThumbnail(@PathVariable Long id) throws MediaException {
+		return getImage(Customer.getImageId(id, ImageResizer.ID_THUMBNAIL));
 	}
 	
-	@GetMapping("thumbnail/{id}")
-	@ResponseBody
-	public Media getThumbnail(@PathVariable Long id) throws MediaException {
-		return mediaTemplate.get(customersService.get(id).getImageId(ImageResizer.ID_THUMBNAIL));
+	private ResponseEntity<?> getImage(String id){
+	   UrlResource resource;
+       resource = new UrlResource(mediaTemplate.getURL(id));
+       if(!resource.exists())
+           return ResponseEntity.notFound().build();
+
+       return ResponseEntity.ok(resource);
 	}
 
 

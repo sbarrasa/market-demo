@@ -167,4 +167,9 @@ public class Customer implements Serializable, EntityImage {
 	        && this.getLastNames().equals(customer.getLastNames());
 	}
 	
+	public static String getImageId(Long id, String... sufix ) {
+		return EntityImage.getImageId(Customer.class, id, sufix);
+	}
+	
+	
 }

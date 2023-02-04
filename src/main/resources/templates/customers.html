@@ -10,6 +10,7 @@
 	<table>
 		<thead>
 			<tr>
+				<th>IMAGE</th>
 				<th>ID</th>
 				<th>NAME</th>
 				<th>LASTNAME</th>
@@ -21,6 +22,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="customer : ${customers}">
+				<td><img th:alt="${customer.id}" th:src="${mediaTemplate.getURL(customer.getImageId(ID_THUMBNAIL))}"/></td>
 				<td th:text="${customer.id}" />
 				<td th:text="${customer.names}" />
 				<td th:text="${customer.lastNames}" />
