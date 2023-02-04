@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
 import com.blink.mediamanager.MediaTemplate;
-import com.blink.mediamanager.rest.MediaEndpoints;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,17 +29,23 @@ import com.blink.springboot.services.CustomersService;
 @RestController
 @RequestMapping("/customers")
 public class CustomersController {
+	@Value("${com.blink.mediamanager.imageresizer.principalwidth}")
+	private Integer principalWidth;
+	
+	@Value("${com.blink.mediamanager.imageresizer.principalwidth}")
+	private Integer thumbnailWidth;
+	
 	@Autowired
 	MediaTemplate mediaTemplate;
 
 	@Autowired
 	private CustomersService customersService;
 
-	@GetMapping("{id}/view/")
+	@GetMapping("{id}/view")
 	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 		Customer customer = customersService.get(id);
-		mav.addObject("customer", customersService.get(id));
+		mav.addObject("customer", customer);
 		mav.addObject("avatar", mediaTemplate.getURL(customer.getImageId()));
 
 		mav.setViewName("customer");
@@ -47,7 +53,7 @@ public class CustomersController {
 		return mav;
 	}
 
-	@GetMapping(value = "/view/")
+	@GetMapping(value = "/view")
 	public ModelAndView view(@RequestParam(required = false) List<String> orderBy) {
 
 		ModelAndView mav = new ModelAndView();
@@ -114,14 +120,14 @@ public class CustomersController {
 	public List<URL> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
 			throws IOException, MediaException {
 		Customer customer = customersService.get(id);
+		Media media = new Media()
+							.setId(customer.getImageId())
+							.setStream(multipartFile.getInputStream())
+							.setContentType(multipartFile.getContentType());
 
-		// TODO: ImageResizer debe tomar los widths defaults desde las properties
-		// TODO: ImageResizer debe no poner sufijo al primer elemento del resize
-
-		ImageResizer images = new ImageResizer(new Media()
-								.setId(customer.getImageId())
-								.setStream(multipartFile.getInputStream())
-								.setContentType(multipartFile.getContentType()));
+		ImageResizer images = new ImageResizer(media)
+									.setPrincipalWidth(principalWidth)
+									.setThumbnailWidth(thumbnailWidth);
 
 		mediaTemplate.upload(images.getResizes());
 

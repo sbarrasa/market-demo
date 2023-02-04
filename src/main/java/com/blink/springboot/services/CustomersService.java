@@ -1,5 +1,6 @@
 package com.blink.springboot.services;
 
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.blink.mediamanager.MediaTemplate;
 import com.blink.springboot.dao.CustomersRepository;
 import com.blink.springboot.entities.Customer;
 import com.blink.springboot.entities.Sex;
@@ -27,6 +29,8 @@ public class CustomersService {
 	@Autowired
 	private CustomersRepository customersRepository;
 	
+	@Autowired
+	MediaTemplate mediaTemplate;
 
 	private static final String[] defaultOrderFields = {"id"};
 	private static final Sort defaultSort = Sort.by(defaultOrderFields);
@@ -115,4 +119,5 @@ public class CustomersService {
 		customersRepository.delete(customer);
 		return customer;	
 	}
+
 }
