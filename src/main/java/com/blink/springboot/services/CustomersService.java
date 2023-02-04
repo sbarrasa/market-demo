@@ -26,6 +26,7 @@ import com.blink.springboot.entities.Sex;
 public class CustomersService {
 	@Autowired
 	private CustomersRepository customersRepository;
+	
 
 	private static final String[] defaultOrderFields = {"id"};
 	private static final Sort defaultSort = Sort.by(defaultOrderFields);
@@ -114,6 +115,4 @@ public class CustomersService {
 		customersRepository.delete(customer);
 		return customer;	
 	}
-
-	
 }

@@ -109,4 +109,5 @@ public class Product implements EntityImage{
 		return String.format("#%d:%s stock:%d price:%,.2f", getId(), getName(), getStock(), getPrice());
 	}
 	
+	
 }

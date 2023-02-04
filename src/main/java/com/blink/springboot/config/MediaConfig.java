@@ -2,16 +2,21 @@ package com.blink.springboot.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
+
 import com.blink.mediamanager.MediaError;
 import com.blink.mediamanager.MediaTemplate;
 import com.blink.mediamanager.local.MediaLocal;
 import com.blink.mediamanager.s3.MediaS3;
 
 @Configuration
+@EnableAsync
 public class MediaConfig {
+	
 	@Autowired
     private ApplicationContext applicationContext;
 	
@@ -51,7 +56,6 @@ public class MediaConfig {
 			throw new MediaError(String.format("Error when trying to instantiate MediaTemplate class %s", className));
 		}
 	}
-	
 	
 	
 	

@@ -166,4 +166,5 @@ public class Customer implements Serializable, EntityImage {
 	        && this.getNames().equals(customer.getNames())
 	        && this.getLastNames().equals(customer.getLastNames());
 	}
+	
 }
