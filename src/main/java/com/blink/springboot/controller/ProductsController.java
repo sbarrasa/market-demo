@@ -9,7 +9,6 @@ import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
 import com.blink.mediamanager.MediaTemplate;
-import com.blink.springboot.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -77,7 +76,7 @@ public class ProductsController {
 		return mav;
 	}
 
-	@GetMapping("{id}/view/")
+	@GetMapping("{id}/view")
 	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 
