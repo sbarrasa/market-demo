@@ -22,6 +22,7 @@
 		<tbody>
 			<tr th:each="product : ${products}">
 				<td th:text="${product.id}" />
+				<td><img th:alt="${product.id}" th:src="${mediaTemplate.getURL(product.getImageId(ID_THUMBNAIL))}"/></td>
 				<td th:text="${product.name}" />
 				<td th:text="${product.description}" />
 				<td th:text="${product.stock}" />

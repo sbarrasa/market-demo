@@ -1,29 +1,45 @@
 package com.blink.springboot.controller;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
+import com.blink.mediamanager.ImageResizer;
+import com.blink.mediamanager.Media;
+import com.blink.mediamanager.MediaException;
+import com.blink.mediamanager.MediaTemplate;
+import com.blink.springboot.entities.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.blink.springboot.dao.ProductsRepository;
 import com.blink.springboot.entities.Product;
 import com.blink.springboot.entities.Views;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
+
+	@Value("${com.blink.mediamanager.imageresizer.principalwidth}")
+	private Integer principalWidth;
+
+	@Value("${com.blink.mediamanager.imageresizer.principalwidth}")
+	private Integer thumbnailWidth;
+
+	@Autowired
+	MediaTemplate mediaTemplate;
+
 	@Autowired
 	private ProductsRepository productsRepository;
 
@@ -55,15 +71,20 @@ public class ProductsController {
 				Sort.by("id")));
 
 		mav.addObject("products", products);
+		mav.addObject("mediaTemplate", mediaTemplate);
+		mav.addObject("ID_THUMBNAIL", ImageResizer.ID_THUMBNAIL);
 
 		return mav;
 	}
 
-	@GetMapping("/view/{id}")
+	@GetMapping("{id}/view/")
 	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 
-		mav.addObject("product", productsRepository.findById(id).get());
+		Product product = productsRepository.findById(id).orElseThrow();
+		mav.addObject("product", product);
+		mav.addObject("image", mediaTemplate.getURL(product.getImageId()));
+
 		mav.setViewName("product");
 
 		return mav;
@@ -98,6 +119,49 @@ public class ProductsController {
 		return product;
 		
 	}
-	
+
+	@ResponseBody
+	@RequestMapping(path = "/{id}/image/upload",
+			method = RequestMethod.POST,
+			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public List<URL> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
+			throws IOException, MediaException {
+		Optional<Product> product = productsRepository.findById(id);
+		Media media = new Media()
+				.setId(product.get().getImageId())
+				.setStream(multipartFile.getInputStream())
+				.setContentType(multipartFile.getContentType());
+
+		ImageResizer images = new ImageResizer(media)
+				.setPrincipalWidth(principalWidth)
+				.setThumbnailWidth(thumbnailWidth);
+
+		mediaTemplate.upload(images.getResizes());
+
+		return images.getURLs();
+	}
+
+	@GetMapping(value=("/{id}/image"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<?> getImage(@PathVariable Long id) throws MediaException {
+		return getImage(Product.getImageId(id));
+	}
+
+	@GetMapping(value=("/{id}/thumbnail"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<?> getThumbnail(@PathVariable Long id) throws MediaException {
+		return getImage(Product.getImageId(id, ImageResizer.ID_THUMBNAIL));
+	}
+
+	private ResponseEntity<?> getImage(String id){
+		UrlResource resource;
+		resource = new UrlResource(mediaTemplate.getURL(id));
+		if(!resource.exists())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(resource);
+	}
+
+
 
 }
