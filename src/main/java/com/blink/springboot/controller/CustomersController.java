@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
@@ -45,10 +44,12 @@ public class CustomersController {
 	public ModelAndView view(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView();
 		Customer customer = customersService.get(id);
+		
+		mav.setViewName("customer");
+		
 		mav.addObject("customer", customer);
 		mav.addObject("avatar", mediaTemplate.getURL(customer.getImageId()));
 
-		mav.setViewName("customer");
 		
 		return mav;
 	}
