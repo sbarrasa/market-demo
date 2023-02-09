@@ -10,7 +10,6 @@ import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -81,7 +80,7 @@ public class ProductsController {
 
 		Product product = productsRepository.findById(id).orElseThrow();
 		mav.addObject("product", product);
-		mav.addObject("image", imageService.getURL(product.getImageId()));
+		mav.addObject("image", imageService.getURL(product));
 
 		mav.setViewName("product");
 
@@ -142,23 +141,15 @@ public class ProductsController {
 	@GetMapping(value=("/{id}/image"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> getImage(@PathVariable Long id) throws MediaException {
-		return getImage(Product.getImageId(id));
+		return imageService.getImage(Product.class, id);
 	}
 
 	@GetMapping(value=("/{id}/thumbnail"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> getThumbnail(@PathVariable Long id) throws MediaException {
-		return getImage(Product.getImageId(id, ImageResizer.ID_THUMBNAIL));
+		return imageService.getImage(Product.class, id, ImageResizer.ID_THUMBNAIL);
 	}
 
-	private ResponseEntity<?> getImage(String id){
-		UrlResource resource;
-		resource = new UrlResource(imageService.getURL(id));
-		if(!resource.exists())
-			return ResponseEntity.notFound().build();
-
-		return ResponseEntity.ok(resource);
-	}
 
 
 

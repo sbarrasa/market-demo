@@ -8,11 +8,9 @@ import java.util.Optional;
 import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
-import com.blink.mediamanager.MediaTemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +49,7 @@ public class CustomersController {
 		mav.setViewName("customer");
 		
 		mav.addObject("customer", customer);
-		mav.addObject("avatar", imageService.getURL(customer.getImageId()));
+		mav.addObject("avatar", imageService.getURL(customer));
 
 		
 		return mav;
@@ -140,23 +138,15 @@ public class CustomersController {
 	@GetMapping(value=("/{id}/image"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> getImage(@PathVariable Long id) throws MediaException {
-		return getImage(Customer.getImageId(id));
+		return imageService.getImage(Customer.class, id);
 	}
 
 	@GetMapping(value=("/{id}/thumbnail"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> getThumbnail(@PathVariable Long id) throws MediaException {
-		return getImage(Customer.getImageId(id, ImageResizer.ID_THUMBNAIL));
+		return imageService.getImage(Customer.class, id, ImageResizer.ID_THUMBNAIL);
 	}
 	
-	private ResponseEntity<?> getImage(String id){
-	   UrlResource resource;
-       resource = new UrlResource(imageService.getURL(id));
-       if(!resource.exists())
-           return ResponseEntity.notFound().build();
-
-       return ResponseEntity.ok(resource);
-	}
 
 
 }

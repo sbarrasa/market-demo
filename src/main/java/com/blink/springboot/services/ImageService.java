@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.blink.mediamanager.Media;
@@ -21,32 +23,54 @@ public class ImageService {
 	
 	@Autowired
 	MediaTemplate mediaTemplate2;
+
 	
-	@CircuitBreaker(name = "imageService", fallbackMethod = "altURL")
-	public URL getURL(String imageID) {
-		return mediaTemplate.getURL(imageID);
+	public URL getURL(EntityImage entity, String... sufix) {
+		return getURL(entity.getImageId(sufix), mediaTemplate);
 	}
-	
+
+	@CircuitBreaker(name = "imageService", fallbackMethod = "getURL2")
+	public URL getURL(String imageId) {
+		return getURL(imageId, mediaTemplate);
+	}
+
+
+	URL getURL2(String imageId) {
+		return getURL(imageId, mediaTemplate2);
+	}
+
+	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) {
+		return mediaTemplateActive.getURL(imageId);
+	}
+
+
+
 	public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String... sufix ) {
 		Map<Object, URL> urls = new HashMap<>();
 		
 		entities.forEach(e -> {
-			urls.put(e.getId(), mediaTemplate.getURL(e.getImageId(sufix)));
+			urls.put(e.getId(), getURL(e, sufix));
 		});
 		
 		return urls;
 				
 	}
 	
-	URL getAltURL(String imageID) {
-		return mediaTemplate2.getURL(imageID);
-	}
-	
+		
 	public Collection<Media> upload(Collection<Media> medias){
 		return 	mediaTemplate.upload(medias);
 
 	}
+
 	
+	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix){
+		UrlResource resource;
+		resource = new UrlResource(getURL(EntityImage.getImageId(entityImageClass, id, sufix)));
+		if(!resource.exists())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(resource);
+	}
 	
 	
 
