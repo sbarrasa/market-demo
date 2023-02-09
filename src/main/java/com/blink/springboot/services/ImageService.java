@@ -18,6 +18,8 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @Service
 public class ImageService {
+	private static final String defaultSufix = "DEFAULT";
+
 	@Autowired
 	MediaTemplate mediaTemplate;
 	
@@ -26,27 +28,23 @@ public class ImageService {
 
 	
 	public URL getURL(EntityImage entity, String... sufix) {
-		return getURL(entity.getImageId(sufix), mediaTemplate);
+		return getURL(entity.getClass(), entity.getId(), sufix);
 	}
 
 	@CircuitBreaker(name = "imageService", fallbackMethod = "getURL2")
-	public URL getURL(String  imageId) {
-		return getURL(imageId, mediaTemplate);
-	}
-
-
-	URL getURL2(String imageId) {
-		return getURL(imageId, mediaTemplate2);
-	}
-
-	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) {
-		return mediaTemplateActive.getURL(imageId);
-	}
-
 	public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
 		return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
 	}
 
+
+	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix){
+		UrlResource resource;
+		resource = new UrlResource(getURL(entityImageClass, id, sufix));
+		if(!resource.exists())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(resource);
+	}
 
 	public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String... sufix ) {
 		Map<Object, URL> urls = new HashMap<>();
@@ -58,23 +56,19 @@ public class ImageService {
 		return urls;
 				
 	}
-	
-		
+
 	public Collection<Media> upload(Collection<Media> medias){
 		return 	mediaTemplate.upload(medias);
 
 	}
 
-	
-	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix){
-		UrlResource resource;
-		resource = new UrlResource(getURL(entityImageClass, id, sufix));
-		if(!resource.exists())
-			return ResponseEntity.notFound().build();
-
-		return ResponseEntity.ok(resource);
+	URL getURL2(Class<? extends EntityImage> entityImageClass) {
+		return getURL(entityImageClass.getName()+defaultSufix, mediaTemplate2);
 	}
-	
+
+	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) {
+		return mediaTemplateActive.getURL(imageId);
+	}
 	
 
 }
