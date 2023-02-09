@@ -30,7 +30,7 @@ public class ImageService {
 	}
 
 	@CircuitBreaker(name = "imageService", fallbackMethod = "getURL2")
-	public URL getURL(String imageId) {
+	public URL getURL(String  imageId) {
 		return getURL(imageId, mediaTemplate);
 	}
 
@@ -43,6 +43,9 @@ public class ImageService {
 		return mediaTemplateActive.getURL(imageId);
 	}
 
+	public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
+		return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
+	}
 
 
 	public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String... sufix ) {
@@ -65,7 +68,7 @@ public class ImageService {
 	
 	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix){
 		UrlResource resource;
-		resource = new UrlResource(getURL(EntityImage.getImageId(entityImageClass, id, sufix)));
+		resource = new UrlResource(getURL(entityImageClass, id, sufix));
 		if(!resource.exists())
 			return ResponseEntity.notFound().build();
 
