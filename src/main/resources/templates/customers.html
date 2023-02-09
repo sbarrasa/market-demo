@@ -23,7 +23,7 @@
 		<tbody>
 			<tr th:each="customer : ${customers}">
 				<td th:text="${customer.id}" />
-				<td><img th:alt="${customer.id}" th:src="${mediaTemplate.getURL(customer.getImageId(ID_THUMBNAIL))}"/></td>
+				<td><img th:alt="${customer.id}" th:src="${imageURLs.get(customer.id)}"/></td>
 				<td th:text="${customer.names}" />
 				<td th:text="${customer.lastNames}" />
 				<td th:text="${customer.age}" />

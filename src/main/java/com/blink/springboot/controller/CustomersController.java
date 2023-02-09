@@ -23,11 +23,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.blink.springboot.entities.Customer;
 import com.blink.springboot.entities.Sex;
 import com.blink.springboot.services.CustomersService;
+import com.blink.springboot.services.ImageService;
 
 
 @RestController
 @RequestMapping("/customers")
 public class CustomersController {
+	
 	@Value("${com.blink.mediamanager.imageresizer.principalwidth}")
 	private Integer principalWidth;
 	
@@ -35,7 +37,8 @@ public class CustomersController {
 	private Integer thumbnailWidth;
 	
 	@Autowired
-	MediaTemplate mediaTemplate;
+	ImageService imageService;
+	
 
 	@Autowired
 	private CustomersService customersService;
@@ -48,7 +51,7 @@ public class CustomersController {
 		mav.setViewName("customer");
 		
 		mav.addObject("customer", customer);
-		mav.addObject("avatar", mediaTemplate.getURL(customer.getImageId()));
+		mav.addObject("avatar", imageService.getURL(customer.getImageId()));
 
 		
 		return mav;
@@ -64,8 +67,7 @@ public class CustomersController {
 		List<Customer> customers = customersService.getAll(orderBy);
 
 		mav.addObject("customers", customers);
-		mav.addObject("mediaTemplate", mediaTemplate);
-		mav.addObject("ID_THUMBNAIL", ImageResizer.ID_THUMBNAIL);
+		mav.addObject("imageURLs", imageService.getURLs(customers, ImageResizer.ID_THUMBNAIL));
 
 		return mav;
 	}
@@ -130,8 +132,8 @@ public class CustomersController {
 									.setPrincipalWidth(principalWidth)
 									.setThumbnailWidth(thumbnailWidth);
 
-		mediaTemplate.upload(images.getResizes());
-
+		imageService.upload(images.getResizes());
+		
 		return images.getURLs();
 	}
 
@@ -149,7 +151,7 @@ public class CustomersController {
 	
 	private ResponseEntity<?> getImage(String id){
 	   UrlResource resource;
-       resource = new UrlResource(mediaTemplate.getURL(id));
+       resource = new UrlResource(imageService.getURL(id));
        if(!resource.exists())
            return ResponseEntity.notFound().build();
 
