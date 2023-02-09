@@ -19,7 +19,10 @@ public class ImageService {
 	@Autowired
 	MediaTemplate mediaTemplate;
 	
-	@CircuitBreaker(name = "imageService", fallbackMethod = "altImage")
+	@Autowired
+	MediaTemplate mediaTemplate2;
+	
+	@CircuitBreaker(name = "imageService", fallbackMethod = "altURL")
 	public URL getURL(String imageID) {
 		return mediaTemplate.getURL(imageID);
 	}
@@ -35,9 +38,8 @@ public class ImageService {
 				
 	}
 	
-	URL getAltImage(String imageID) {
-		//TODO: acá deberías 
-		return null;
+	URL getAltURL(String imageID) {
+		return mediaTemplate2.getURL(imageID);
 	}
 	
 	public Collection<Media> upload(Collection<Media> medias){
