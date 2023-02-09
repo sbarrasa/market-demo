@@ -63,7 +63,7 @@ public class ImageService {
 	}
 
 	URL getURL2(Class<? extends EntityImage> entityImageClass) {
-		return getURL(entityImageClass.getName()+defaultSufix, mediaTemplate2);
+		return getURL(EntityImage.getImageId(entityImageClass, defaultSufix), mediaTemplate2);
 	}
 
 	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) {
