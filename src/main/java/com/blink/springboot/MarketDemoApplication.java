@@ -20,7 +20,6 @@ public class MarketDemoApplication extends SpringApplication{
 	
 	private static Properties staticProperties() {
 		Properties properties = new Properties();
-		
 		properties.put("spring.application.name","Market DEMO");
 		properties.put("spring.application.version","1.2");
 

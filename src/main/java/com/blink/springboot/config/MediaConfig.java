@@ -55,6 +55,18 @@ public class MediaConfig {
 			throw new MediaError(String.format("Error when trying to instantiate MediaTemplate class %s", className));
 		}
 	}
+
+	@Bean
+	public MediaTemplate mediaTemplate2(@Value("${com.blink.mediamanager.fallback.class}") String className,
+									   @Value("${com.blink.mediamanager.fallback.path}") String path)  {
+		try {
+			MediaTemplate mediaTemplate = (MediaTemplate) applicationContext.getBean(Class.forName(className));
+			mediaTemplate.setPath(path);
+			return mediaTemplate;
+		} catch (Exception e) {
+			throw new MediaError(String.format("Error when trying to instantiate MediaTemplate class %s", className));
+		}
+	}
 	
 	
 	

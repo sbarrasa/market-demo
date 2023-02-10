@@ -4,7 +4,9 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import com.blink.mediamanager.MediaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +35,12 @@ public class ImageService {
 
 	@CircuitBreaker(name = "imageService", fallbackMethod = "getURL2")
 	public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
-		return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
+		try {
+			return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
+		} catch (MediaException e) {
+			Logger.getGlobal().warning(e.getMessage());
+			return null;
+		}
 	}
 
 
@@ -62,12 +69,12 @@ public class ImageService {
 
 	}
 
-	URL getURL2(Class<? extends EntityImage> entityImageClass) {
+	URL getURL2(Class<? extends EntityImage> entityImageClass) throws MediaException {
 		return getURL(EntityImage.getImageId(entityImageClass, defaultSufix), mediaTemplate2);
 	}
 
-	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) {
-		return mediaTemplateActive.getURL(imageId);
+	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) throws MediaException {
+		return mediaTemplateActive.getValidURL(imageId);
 	}
 	
 

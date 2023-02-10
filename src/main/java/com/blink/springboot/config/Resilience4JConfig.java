@@ -21,7 +21,7 @@ public class Resilience4JConfig {
 		    .build();
 
 		// Create a CircuitBreakerRegistry with a custom global configuration
-		private TimeLimiterConfig timeLimiterConfig = TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(4))
+		private TimeLimiterConfig timeLimiterConfig = TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(0)) //4 default
 													.build();
 
 	@Bean
