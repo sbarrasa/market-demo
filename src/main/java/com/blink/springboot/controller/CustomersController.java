@@ -9,6 +9,7 @@ import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.*;
@@ -56,6 +57,7 @@ public class CustomersController {
 	}
 
 	@GetMapping(value = "/view")
+	@CircuitBreaker(name = "customerView", fallbackMethod = "fallbackView")
 	public ModelAndView view(@RequestParam(required = false) List<String> orderBy) {
 
 		ModelAndView mav = new ModelAndView();
@@ -66,6 +68,20 @@ public class CustomersController {
 
 		mav.addObject("customers", customers);
 		mav.addObject("imageURLs", imageService.getURLs(customers, ImageResizer.ID_THUMBNAIL));
+
+		return mav;
+	}
+
+	public ModelAndView fallbackView(@RequestParam(required = false) List<String> orderBy, Exception e) {
+
+		ModelAndView mav = new ModelAndView();
+
+		mav.setViewName("customers");
+
+		List<Customer> customers = customersService.getAll(orderBy);
+
+		//mav.addObject("customers", customers);
+		//mav.addObject("imageURLs", imageService.getURLs(customers, ImageResizer.ID_THUMBNAIL));
 
 		return mav;
 	}

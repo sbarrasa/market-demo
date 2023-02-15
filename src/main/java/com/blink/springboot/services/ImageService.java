@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.blink.mediamanager.MediaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -20,62 +21,64 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @Service
 public class ImageService {
-	private static final String defaultSufix = "DEFAULT";
+    private static final String defaultSufix = "DEFAULT";
 
-	@Autowired
-	MediaTemplate mediaTemplate;
-	
-	@Autowired
-	MediaTemplate mediaTemplate2;
+    @Autowired
+    MediaTemplate mediaTemplate;
 
-	
-	public URL getURL(EntityImage entity, String... sufix) {
-		return getURL(entity.getClass(), entity.getId(), sufix);
-	}
-
-	@CircuitBreaker(name = "imageService", fallbackMethod = "getURL2")
-	public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
-		try {
-			return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
-		} catch (MediaException e) {
-			Logger.getGlobal().warning(e.getMessage());
-			return null;
-		}
-	}
+    @Autowired
+    MediaTemplate mediaTemplate2;
 
 
-	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix){
-		UrlResource resource;
-		resource = new UrlResource(getURL(entityImageClass, id, sufix));
-		if(!resource.exists())
-			return ResponseEntity.notFound().build();
+    public URL getURL(EntityImage entity, String... sufix) {
+        return getURL(entity.getClass(), entity.getId(), sufix);
+    }
 
-		return ResponseEntity.ok(resource);
-	}
 
-	public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String... sufix ) {
-		Map<Object, URL> urls = new HashMap<>();
-		
-		entities.forEach(e -> {
-			urls.put(e.getId(), getURL(e, sufix));
-		});
-		
-		return urls;
-				
-	}
+    public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
+        try {
+            return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
+        } catch (MediaException e) {
+            Logger.getGlobal().warning(e.getMessage());
+            return null;
+        }
+    }
 
-	public Collection<Media> upload(Collection<Media> medias){
-		return 	mediaTemplate.upload(medias);
 
-	}
+    public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix) {
+        UrlResource resource;
+        resource = new UrlResource(getURL(entityImageClass, id, sufix));
+        if (!resource.exists())
+            return ResponseEntity.notFound().build();
 
-	URL getURL2(Class<? extends EntityImage> entityImageClass) throws MediaException {
-		return getURL(EntityImage.getImageId(entityImageClass, defaultSufix), mediaTemplate2);
-	}
+        return ResponseEntity.ok(resource);
+    }
 
-	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) throws MediaException {
-		return mediaTemplateActive.getValidURL(imageId);
-	}
-	
+    public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String... sufix) {
+        Map<Object, URL> urls = new HashMap<>();
+
+        entities.forEach(e -> {
+            urls.put(e.getId(), getURL(e, sufix));
+        });
+
+        return urls;
+
+    }
+
+
+    public Collection<Media> upload(Collection<Media> medias) {
+        return mediaTemplate.upload(medias);
+
+    }
+
+    private URL getURL2(String imageId, MediaTemplate mediaTemplateActive, Exception e) throws MediaException {
+        return mediaTemplate2.getValidURL(imageId);
+    }
+
+
+    private URL getURL(String imageId, MediaTemplate mediaTemplateActive) throws MediaException {
+        return mediaTemplateActive.getValidURL(imageId);
+    }
+
 
 }
