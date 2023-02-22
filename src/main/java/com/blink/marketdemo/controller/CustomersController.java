@@ -119,9 +119,8 @@ public class CustomersController {
 					consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public List<URL> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
 			throws IOException, MediaException {
-		Customer customer = customersService.get(id);
 		Media media = new Media()
-							.setId(customer.getImageId())
+							.setId(Customer.getImageId(id))
 							.setStream(multipartFile.getInputStream())
 							.setContentType(multipartFile.getContentType());
 
