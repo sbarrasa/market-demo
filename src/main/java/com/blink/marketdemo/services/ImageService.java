@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -14,7 +15,6 @@ import com.blink.marketdemo.entities.EntityImage;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaTemplate;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @Service
 public class ImageService {
@@ -31,15 +31,13 @@ public class ImageService {
 		return getURL(entity.getClass(), entity.getId(), sufix);
 	}
 
-	@CircuitBreaker(name = "imageService", fallbackMethod = "getURL2")
 	public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
 		return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
 	}
 
 
 	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix){
-		UrlResource resource;
-		resource = new UrlResource(getURL(entityImageClass, id, sufix));
+		UrlResource resource = new UrlResource(getURL(entityImageClass, id, sufix));
 		if(!resource.exists())
 			return ResponseEntity.notFound().build();
 
@@ -66,8 +64,8 @@ public class ImageService {
 		return getURL(EntityImage.getImageId(entityImageClass, defaultSufix), mediaTemplate2);
 	}
 
-	private static URL getURL(String imageId, MediaTemplate mediaTemplateActive) {
-		return mediaTemplateActive.getURL(imageId);
+	private static URL getURL(String imageFile, MediaTemplate mediaTemplateActive) {
+		return mediaTemplateActive.getURL(imageFile);
 	}
 	
 

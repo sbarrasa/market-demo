@@ -29,11 +29,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/products")
 public class ProductsController {
 
-	@Value("${com.blink.mediamanager.imageresizer.principalwidth}")
-	private Integer principalWidth;
+	@Value("${com.blink.mediamanager.imageresizer.mainwidth}")
+	private Integer mainWidth;
 
-	@Value("${com.blink.mediamanager.imageresizer.principalwidth}")
-	private Integer thumbnailWidth;
+	@Value("${com.blink.mediamanager.imageresizer.thumbwidth}")
+	private Integer thumbWidth;
 
 	@Autowired
 	ImageService imageService;
@@ -130,8 +130,8 @@ public class ProductsController {
 				.setContentType(multipartFile.getContentType());
 
 		ImageResizer images = new ImageResizer(media)
-				.setPrincipalWidth(principalWidth)
-				.setThumbnailWidth(thumbnailWidth);
+				.setPrincipalWidth(mainWidth)
+				.setThumbnailWidth(thumbWidth);
 
 		imageService.upload(images.getResizes());
 
