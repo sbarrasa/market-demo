@@ -1,4 +1,4 @@
-package com.blink.springboot.controller;
+package com.blink.marketdemo.controller;
 
 
 import java.util.Optional;
@@ -13,10 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.blink.springboot.entities.Views;
-import com.blink.springboot.entities.ProductOrdered;
-import com.blink.springboot.entities.Order;
-import com.blink.springboot.services.OrdersService;
+import com.blink.marketdemo.entities.Order;
+import com.blink.marketdemo.entities.ProductOrdered;
+import com.blink.marketdemo.entities.Views;
+import com.blink.marketdemo.services.OrdersService;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController

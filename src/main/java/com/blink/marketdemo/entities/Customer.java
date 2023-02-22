@@ -1,4 +1,4 @@
-package com.blink.springboot.entities;
+package com.blink.marketdemo.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -21,7 +21,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
-import com.blink.springboot.config.Formats;
+import com.blink.marketdemo.config.Formats;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;

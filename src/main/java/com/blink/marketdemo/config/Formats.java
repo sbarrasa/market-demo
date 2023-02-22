@@ -1,4 +1,4 @@
-package com.blink.springboot.config;
+package com.blink.marketdemo.config;
 
 public class Formats {
 	public static final String DATE_TIME_MILIS = "yyyy-MM-dd hh:mm:ss.SSS";

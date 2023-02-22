@@ -1,4 +1,4 @@
-package com.blink.springboot.entities;
+package com.blink.marketdemo.entities;
 
 
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.blink.springboot.config.Formats;
+import com.blink.marketdemo.config.Formats;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 

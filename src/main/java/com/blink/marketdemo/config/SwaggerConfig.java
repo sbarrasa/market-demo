@@ -1,4 +1,4 @@
-package com.blink.springboot.config;
+package com.blink.marketdemo.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.blink.springboot.services;
+package com.blink.marketdemo.services;
 
 
 import java.util.Arrays;
@@ -19,10 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.blink.marketdemo.dao.CustomersRepository;
+import com.blink.marketdemo.entities.Customer;
+import com.blink.marketdemo.entities.Sex;
 import com.blink.mediamanager.MediaTemplate;
-import com.blink.springboot.dao.CustomersRepository;
-import com.blink.springboot.entities.Customer;
-import com.blink.springboot.entities.Sex;
 
 @Service
 public class CustomersService {

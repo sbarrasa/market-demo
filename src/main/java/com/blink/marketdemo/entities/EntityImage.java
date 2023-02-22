@@ -1,4 +1,4 @@
-package com.blink.springboot.entities;
+package com.blink.marketdemo.entities;
 
 public interface EntityImage {
 	public Object getId();

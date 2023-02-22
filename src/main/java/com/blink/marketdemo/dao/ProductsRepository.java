@@ -1,4 +1,4 @@
-package com.blink.springboot.dao;
+package com.blink.marketdemo.dao;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.blink.springboot.entities.Product;
+import com.blink.marketdemo.entities.Product;
 
 @Repository
 public interface ProductsRepository extends JpaRepository<Product, Long> {

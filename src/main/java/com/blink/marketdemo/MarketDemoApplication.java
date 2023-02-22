@@ -1,4 +1,4 @@
-package com.blink.springboot;
+package com.blink.marketdemo;
 
 import java.util.Properties;
 

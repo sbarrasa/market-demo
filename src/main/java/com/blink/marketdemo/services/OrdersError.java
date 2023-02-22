@@ -1,6 +1,6 @@
-package com.blink.springboot.services;
+package com.blink.marketdemo.services;
 
-import com.blink.springboot.entities.Customer;
+import com.blink.marketdemo.entities.Customer;
 
 public class OrdersError extends Error {
 	

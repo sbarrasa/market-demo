@@ -1,10 +1,14 @@
-package com.blink.springboot.controller;
+package com.blink.marketdemo.controller;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
+import com.blink.marketdemo.entities.Customer;
+import com.blink.marketdemo.entities.Sex;
+import com.blink.marketdemo.services.CustomersService;
+import com.blink.marketdemo.services.ImageService;
 import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
@@ -17,11 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.blink.springboot.entities.Customer;
-import com.blink.springboot.entities.Sex;
-import com.blink.springboot.services.CustomersService;
-import com.blink.springboot.services.ImageService;
 
 
 @RestController

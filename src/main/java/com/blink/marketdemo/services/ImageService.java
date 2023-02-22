@@ -1,4 +1,4 @@
-package com.blink.springboot.services;
+package com.blink.marketdemo.services;
 
 import java.net.URL;
 import java.util.Collection;
@@ -10,9 +10,9 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.blink.marketdemo.entities.EntityImage;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaTemplate;
-import com.blink.springboot.entities.EntityImage;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 

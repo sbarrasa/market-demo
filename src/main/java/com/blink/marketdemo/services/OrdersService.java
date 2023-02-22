@@ -1,4 +1,4 @@
-package com.blink.springboot.services;
+package com.blink.marketdemo.services;
 
 import java.util.List;
 import java.util.Set;
@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.blink.springboot.dao.CustomersRepository;
-import com.blink.springboot.dao.OrdersRepository;
-import com.blink.springboot.dao.ProductsRepository;
-import com.blink.springboot.entities.Customer;
-import com.blink.springboot.entities.Order;
-import com.blink.springboot.entities.Product;
-import com.blink.springboot.entities.ProductOrdered;
+import com.blink.marketdemo.dao.CustomersRepository;
+import com.blink.marketdemo.dao.OrdersRepository;
+import com.blink.marketdemo.dao.ProductsRepository;
+import com.blink.marketdemo.entities.Customer;
+import com.blink.marketdemo.entities.Order;
+import com.blink.marketdemo.entities.Product;
+import com.blink.marketdemo.entities.ProductOrdered;
 
 @Service
 public class OrdersService {

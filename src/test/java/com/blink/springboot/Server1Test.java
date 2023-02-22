@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.blink.springboot.entities.Customer;
-import com.blink.springboot.services.CustomersService;
+import com.blink.marketdemo.entities.Customer;
+import com.blink.marketdemo.services.CustomersService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
