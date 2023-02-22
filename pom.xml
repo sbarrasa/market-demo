@@ -18,11 +18,6 @@
 
 	<dependencies>
 
-		<dependency>
-			<groupId>com.github.sbarrasa</groupId>
-			<artifactId>media</artifactId>
-			<version>master-SNAPSHOT</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -132,6 +127,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.github.sbarrasa</groupId>
+			<artifactId>media</artifactId>
+			<version>master-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>

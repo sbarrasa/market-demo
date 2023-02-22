@@ -53,7 +53,8 @@ public class MediaConfig {
 	public MediaTemplate mediaTemplate(@Value("${com.blink.mediamanager.class}") String className,
 										@Value("${com.blink.mediamanager.path}") String path)  {
 		try {
-			MediaTemplate mediaTemplate = (MediaTemplate) applicationContext.getBean(Class.forName(className));
+			MediaTemplate mediaTemplate = MediaTemplate.buildMediaTemplate(className);
+	//				(MediaTemplate) applicationContext.getBean(Class.forName(className));
 			mediaTemplate.setPath(path);
 			return mediaTemplate;
 		} catch (Exception e) {
