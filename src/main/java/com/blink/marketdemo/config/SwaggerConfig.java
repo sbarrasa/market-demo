@@ -28,7 +28,7 @@ public class SwaggerConfig implements WebMvcConfigurer{
 	@Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("com.blink.springboot"))
+                .apis(RequestHandlerSelectors.basePackage("com.blink.marketdemo"))
                 .paths(PathSelectors.regex("/.*"))
                 .build().apiInfo(apiInfoMetaData());
     }
@@ -36,8 +36,8 @@ public class SwaggerConfig implements WebMvcConfigurer{
     private ApiInfo apiInfoMetaData() {
 
         return new ApiInfoBuilder().title(applicationContext.getId())
-                .description("Un ejemplo de CRUD simple usando spring")
-                .contact(new Contact("Sebastián Barrasa", "https://www.cruzagramas.com.ar", "sebastian.barrasa@blink-srl.com"))
+                .description("Marketdemo")
+                .contact(new Contact("Sebastián Barrasa", "https://www.blink-srl.com/", "sebastian.barrasa@blink-srl.com"))
                 .license("Apache 2.0")
                 .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html") 
                 .version(applicationContext.getEnvironment().getProperty("spring.appliction.version"))
