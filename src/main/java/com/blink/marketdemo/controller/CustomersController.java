@@ -128,7 +128,8 @@ public class CustomersController {
 		ImageResizer images = new ImageResizer(media)
 									.setPrincipalWidth(mainWidth)
 									.setThumbnailWidth(thumbWidth);
-
+		
+		
 		return imageService.upload(images.getResizes());
 		
 	}
