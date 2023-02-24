@@ -56,7 +56,7 @@ public class ImageService {
 	}
 
 	public Collection<Media> upload(Collection<Media> medias){
-		return 	mediaTemplate.upload(medias);
+		return mediaTemplate.upload(medias);
 
 	}
 

@@ -2,6 +2,7 @@ package com.blink.marketdemo.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,7 +118,7 @@ public class CustomersController {
 	@RequestMapping(path = "/{id}/image/upload", 
 					method = RequestMethod.POST, 
 					consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<URL> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
+	public Collection<Media> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
 			throws IOException, MediaException {
 		Media media = new Media()
 							.setId(Customer.getImageId(id))
@@ -128,9 +129,8 @@ public class CustomersController {
 									.setPrincipalWidth(mainWidth)
 									.setThumbnailWidth(thumbWidth);
 
-		imageService.upload(images.getResizes());
+		return imageService.upload(images.getResizes());
 		
-		return images.getURLs();
 	}
 
 	@GetMapping(value=("/{id}/image"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

@@ -22,16 +22,12 @@ import org.springframework.stereotype.Service;
 import com.blink.marketdemo.dao.CustomersRepository;
 import com.blink.marketdemo.entities.Customer;
 import com.blink.marketdemo.entities.Sex;
-import com.blink.mediamanager.MediaTemplate;
 
 @Service
 public class CustomersService {
 	@Autowired
 	private CustomersRepository customersRepository;
 	
-	@Autowired
-	MediaTemplate mediaTemplate;
-
 	private static final String[] defaultOrderFields = {"id"};
 	private static final Sort defaultSort = Sort.by(defaultOrderFields);
 	
