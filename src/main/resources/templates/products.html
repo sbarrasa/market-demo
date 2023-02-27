@@ -11,23 +11,22 @@
 		<thead>
 			<tr>
 				<th>ID</th>
+				<th>IMAGE</th>
 				<th>NAME</th>
 				<th>DESCRIPTION</th>
 				<th>STOCK</th>
 				<th>PRICE</th>
-				<th>THUMB</th>
-
+		
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="product : ${products}">
 				<td th:text="${product.id}" />
-				<td><img th:alt="${product.id}" th:src="${imageURLs.get(product.id))}"/></td>
+				<td><img th:alt="${product.id}" th:src="${imageURLs.get(product.id)}"/></td>
 				<td th:text="${product.name}" />
 				<td th:text="${product.description}" />
 				<td th:text="${product.stock}" />
 				<td th:text="${product.price}" />
-				<td th:text="${product.id}" />
 			</tr>
 		</tbody>
 	</table>

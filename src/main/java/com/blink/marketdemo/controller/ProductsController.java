@@ -2,10 +2,12 @@ package com.blink.marketdemo.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import com.blink.marketdemo.dao.ProductsRepository;
+import com.blink.marketdemo.entities.Customer;
 import com.blink.marketdemo.entities.Product;
 import com.blink.marketdemo.entities.Views;
 import com.blink.marketdemo.services.ImageService;
@@ -68,7 +70,7 @@ public class ProductsController {
 				size.orElse(50),
 				Sort.by("id")));
 
-		mav.addObject("products", products);
+		mav.addObject("products", products.getContent());
 		mav.addObject("imageURLs", imageService.getURLs(products.getContent(), ImageResizer.ID_THUMBNAIL));
 
 		return mav;
@@ -121,21 +123,17 @@ public class ProductsController {
 	@RequestMapping(path = "/{id}/image/upload",
 			method = RequestMethod.POST,
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<URL> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
+	public Collection<Media> uploadImage(@PathVariable Long id, @RequestPart() MultipartFile multipartFile)
 			throws IOException, MediaException {
-		Optional<Product> product = productsRepository.findById(id);
 		Media media = new Media()
-				.setId(product.get().getImageId())
+				.setId(Product.getImageId(id))
 				.setStream(multipartFile.getInputStream())
 				.setContentType(multipartFile.getContentType());
 
-		ImageResizer images = new ImageResizer(media)
-				.setPrincipalWidth(mainWidth)
-				.setThumbnailWidth(thumbWidth);
 
-		imageService.upload(images.getResizes());
+		return imageService.upload(media);
 
-		return images.getURLs();
+		
 	}
 
 	@GetMapping(value=("/{id}/image"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

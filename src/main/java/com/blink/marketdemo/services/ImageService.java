@@ -6,18 +6,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.blink.marketdemo.entities.EntityImage;
+import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
+import com.blink.mediamanager.MediaException;
 import com.blink.mediamanager.MediaTemplate;
 
 
 @Service
 public class ImageService {
 	private static final String defaultSufix = "DEFAULT";
+
+	@Value("${com.blink.mediamanager.imageresizer.mainwidth}")
+	private Integer mainWidth;
+	
+	@Value("${com.blink.mediamanager.imageresizer.thumbwidth}")
+	private Integer thumbWidth;
 
 	@Autowired
 	MediaTemplate mediaTemplate;
@@ -55,10 +64,6 @@ public class ImageService {
 				
 	}
 
-	public Collection<Media> upload(Collection<Media> medias){
-		return mediaTemplate.upload(medias);
-
-	}
 
 	URL getURL2(Class<? extends EntityImage> entityImageClass) {
 		return getURL(EntityImage.getImageId(entityImageClass, defaultSufix), mediaTemplate2);
@@ -67,6 +72,18 @@ public class ImageService {
 	private static URL getURL(String imageFile, MediaTemplate mediaTemplateActive) {
 		return mediaTemplateActive.getURL(imageFile);
 	}
+
+	public Collection<Media> upload(Media media) throws MediaException {
+		ImageResizer images = new ImageResizer(media)
+				.setPrincipalWidth(mainWidth)
+				.setThumbnailWidth(thumbWidth);
+
+
+		return upload(images.getResizes());
+	}
 	
+	public Collection<Media> upload(Collection<Media> medias){
+		return mediaTemplate.upload(medias);
+	}
 
 }

@@ -27,11 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/customers")
 public class CustomersController {
 	
-	@Value("${com.blink.mediamanager.imageresizer.mainwidth}")
-	private Integer mainWidth;
-	
-	@Value("${com.blink.mediamanager.imageresizer.thumbwidth}")
-	private Integer thumbWidth;
 	
 	@Autowired
 	ImageService imageService;
@@ -123,13 +118,8 @@ public class CustomersController {
 							.setId(Customer.getImageId(id))
 							.setStream(multipartFile.getInputStream())
 							.setContentType(multipartFile.getContentType());
-
-		ImageResizer images = new ImageResizer(media)
-									.setPrincipalWidth(mainWidth)
-									.setThumbnailWidth(thumbWidth);
 		
-		
-		return imageService.upload(images.getResizes());
+		return imageService.upload(media);
 		
 	}
 
