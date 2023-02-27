@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -35,25 +36,28 @@ public class ImageService {
 	
 	MediaTemplate mediaTemplate2 = new MediaLocal().setPath("/");
 
-	
-	
-	public URL getURL(Class<? extends EntityImage> entityImageClass, Object id, String... sufix) {
-		String imageId;
-		
-		try{
-			imageId = EntityImage.getImageId(entityImageClass, id, sufix);
-			return mediaTemplate.getValidURL(imageId);
-
-		}catch(Exception e) {
-			imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-			return mediaTemplate2.getURL(imageId);
-
-		}
+	public URL getURL(EntityImage entityImage, String... sufix) {
+		return getURL(entityImage.getClass(), entityImage.getId(), sufix);
 		
 	}
 
+	
+	@CircuitBreaker(name = "imageService", fallbackMethod = "getURLFallback")
+	public URL getURL(Class<? extends EntityImage> entityImageClass, Object id, String... sufix)  {
+		
+		String imageId ;
+		try {
+			imageId = EntityImage.getImageId(entityImageClass, id, sufix);
+			return mediaTemplate.getValidURL(imageId);
+		} catch (MediaException e) {
+			imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
+			return mediaTemplate2.getURL(imageId);
+		}
 
-	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix){
+	}
+		
+
+	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix) throws MediaException{
 		UrlResource resource = new UrlResource(getURL(entityImageClass, id, sufix));
 		if(!resource.exists())
 			return ResponseEntity.notFound().build();
@@ -72,8 +76,12 @@ public class ImageService {
 				
 	}
 	
-	public URL getURL(EntityImage entity, String... sufix) {
-		return getURL(entity.getClass(), entity.getId(), sufix);
+
+
+	URL getURLFallback(Class<? extends EntityImage> entityImageClass, String... sufix) {
+		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
+		return mediaTemplate2.getURL(imageId);
+
 	}
 
 
