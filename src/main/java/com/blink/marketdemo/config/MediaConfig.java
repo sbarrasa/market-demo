@@ -42,11 +42,6 @@ public class MediaConfig {
 		}
 	
 	
-	@SuppressWarnings("static-method")
-	@Bean 
-	public MediaTemplate mediaTemplate2(@Value("${com.blink.mediamanager.2.path}") String path)  {
-		return MediaTemplate.buildMediaTemplate("com.blink.mediamanager.local.MediaLocal").setPath(path);
-	}
 		
 	@Bean 
 	public MediaTemplate mediaTemplate(@Value("${com.blink.mediamanager.class}") String className,
