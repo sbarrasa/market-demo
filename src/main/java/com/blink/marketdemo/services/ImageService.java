@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -39,6 +40,8 @@ public class ImageService {
 		return getURL(entity.getClass(), entity.getId(), sufix);
 	}
 
+
+	@CircuitBreaker(name = "imageService", fallbackMethod = "getURLFallback")
 	public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
 		String imageIdStr = EntityImage.getImageId(entityImageClass, imageId, sufix);
 		return getURL(imageIdStr, mediaTemplate);
@@ -65,7 +68,7 @@ public class ImageService {
 	}
 
 
-	URL getURL2(Class<? extends EntityImage> entityImageClass) {
+	URL getURLFallback(Class<? extends EntityImage> entityImageClass) {
 		return getURL(EntityImage.getImageId(entityImageClass, defaultSufix), mediaTemplate2);
 	}
 
