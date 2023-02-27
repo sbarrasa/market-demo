@@ -30,15 +30,13 @@ public class MediaConfig {
     public MediaS3 s3(@Value("${aws.access.key.id}") String accessKey,
     	    @Value("${aws.secret.access.key}") String secretKey,
     	    @Value("${aws.s3.region}") String region,
-    	    @Value("${aws.s3.bucket.name}") String bucket,
-    	    @Value("${com.blink.mediamanager.path}") String path) {
+    	    @Value("${aws.s3.bucket.name}") String bucket) {
 
 		return new MediaS3()
 					.setAccessKey(accessKey)
 					.setSecretKey(secretKey)
 					.setBucket(bucket)
-					.setRegion(region)
-					.setPath(path);
+					.setRegion(region);
 		
 		}
 	
@@ -53,8 +51,7 @@ public class MediaConfig {
 	public MediaTemplate mediaTemplate(@Value("${com.blink.mediamanager.class}") String className,
 										@Value("${com.blink.mediamanager.path}") String path)  {
 		try {
-			MediaTemplate mediaTemplate = MediaTemplate.buildMediaTemplate(className);
-	//				(MediaTemplate) applicationContext.getBean(Class.forName(className));
+			MediaTemplate mediaTemplate = (MediaTemplate) applicationContext.getBean(Class.forName(className));
 			mediaTemplate.setPath(path);
 			return mediaTemplate;
 		} catch (Exception e) {

@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -32,7 +31,8 @@ public class ImageService {
 	}
 
 	public URL getURL(Class<? extends EntityImage> entityImageClass, Object imageId, String... sufix) {
-		return getURL(EntityImage.getImageId(entityImageClass, imageId, sufix), mediaTemplate);
+		String imageIdStr = EntityImage.getImageId(entityImageClass, imageId, sufix);
+		return getURL(imageIdStr, mediaTemplate);
 	}
 
 
