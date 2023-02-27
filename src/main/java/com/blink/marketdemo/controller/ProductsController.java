@@ -1,13 +1,11 @@
 package com.blink.marketdemo.controller;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import com.blink.marketdemo.dao.ProductsRepository;
-import com.blink.marketdemo.entities.Customer;
 import com.blink.marketdemo.entities.Product;
 import com.blink.marketdemo.entities.Views;
 import com.blink.marketdemo.services.ImageService;
@@ -15,7 +13,6 @@ import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,11 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/products")
 public class ProductsController {
 
-	@Value("${com.blink.mediamanager.imageresizer.mainwidth}")
-	private Integer mainWidth;
-
-	@Value("${com.blink.mediamanager.imageresizer.thumbwidth}")
-	private Integer thumbWidth;
 
 	@Autowired
 	ImageService imageService;
