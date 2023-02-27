@@ -1,5 +1,6 @@
 package com.blink.marketdemo.config;
 
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -51,7 +52,14 @@ public class MediaConfig {
 	public MediaTemplate mediaTemplate(@Value("${com.blink.mediamanager.class}") String className,
 										@Value("${com.blink.mediamanager.path}") String path)  {
 		try {
-			MediaTemplate mediaTemplate = (MediaTemplate) applicationContext.getBean(Class.forName(className));
+			MediaTemplate mediaTemplate ;
+			try {
+				
+				mediaTemplate = (MediaTemplate) applicationContext.getBean(Class.forName(className));
+			}catch (NoSuchBeanDefinitionException eb) {
+				mediaTemplate = MediaTemplate.buildMediaTemplate(className);
+			}
+			
 			mediaTemplate.setPath(path);
 			return mediaTemplate;
 		} catch (Exception e) {
