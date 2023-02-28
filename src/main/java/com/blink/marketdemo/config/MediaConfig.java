@@ -22,8 +22,10 @@ public class MediaConfig {
 	
 	@SuppressWarnings("static-method")
 	@Bean
-	public MediaLocal localMedia() {
-		return new MediaLocal();
+	public MediaLocal mediaLocal(@Value("${com.blink.mediamanager.local.path}") String path) {
+		MediaLocal mediaLocal = new MediaLocal();
+		mediaLocal.setPath("/resources/image");
+		return mediaLocal;
 	}
 	
 	@SuppressWarnings("static-method")
