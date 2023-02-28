@@ -3,17 +3,24 @@ package com.blink.marketdemo.entities;
 public interface EntityImage {
 	public Object getId();
 	
-	static public String getImageId(Class<?> clazz, Object id, String... sufixes) {
-		String sufix = "";
-		if(sufixes.length >0)
-			sufix = sufixes[0];
-
+	static public String getImageId(Class<?> clazz, Object id) {
+		return getImageId(clazz, id, null);
+	}
+		
+	static public String getImageId(Class<?> clazz, Object id, String sufix) {
+		if(sufix == null)
+			sufix = "";
+		
 		return clazz.getSimpleName()+"-"+id+sufix;
 	}
 	
 	
-	default public String getImageId(String... sufixes) {
-		return getImageId(getClass(), getId(), sufixes);
+	default public String getImageId() {
+		return getImageId(null);
+	}
+		
+	default public String getImageId(String sufix) {
+		return getImageId(getClass(), getId(), sufix);
 	}
 	
 }

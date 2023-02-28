@@ -109,7 +109,11 @@ public class Product implements EntityImage{
 		return String.format("#%d:%s stock:%d price:%,.2f", getId(), getName(), getStock(), getPrice());
 	}
 
-	public static String getImageId(Long id, String... sufix) {
+	public static String getImageId(Long id) {
+		return getImageId(id, null);
+	}
+
+	public static String getImageId(Long id, String sufix) {
 		return EntityImage.getImageId(Product.class, id, sufix);
 	}
 	

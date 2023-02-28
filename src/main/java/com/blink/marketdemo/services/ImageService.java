@@ -32,39 +32,46 @@ public class ImageService {
 	@Value("${com.blink.mediamanager.imageresizer.thumbwidth}")
 	private Integer thumbWidth;
 
+	
 	@Autowired
 	MediaTemplate mediaTemplate;
 
 	@Autowired
 	MediaTemplate mediaLocal;
-	
-	public URL getURL(EntityImage entityImage, String... sufix) {
+
+	public URL getURL(EntityImage entityImage) {
+		return getURL(entityImage, null);
+	}
+
+	public URL getURL(EntityImage entityImage, String sufix) {
 		return getURL(entityImage.getClass(), entityImage.getId(), sufix);
 		
 	}
 
-	@CircuitBreaker(name = "imageService", fallbackMethod = "getURLFallback")
-	public URL getURL(Class<? extends EntityImage> entityImageClass, Object id, String... sufix) {
+	public URL getURL(Class<? extends EntityImage> entityImageClass, Object id, String sufix) {
 		String imageId ;
-		try {
-			imageId = EntityImage.getImageId(entityImageClass, id, sufix);
-			return mediaTemplate.getValidURL(imageId);
-		}catch(Exception e) {
-			imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-			return mediaLocal.getURL(imageId);
-		}	
+		imageId = EntityImage.getImageId(entityImageClass, id, sufix);
+		
+		return mediaTemplate.getURL(imageId);
 	}
 		
-
-	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String... sufix) {
+	@CircuitBreaker(name = "imageService", fallbackMethod = "getImageFallback")
+	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String sufix) {
 		URL url = getURL(entityImageClass, id, sufix);
 		Resource resource = new UrlResource(url);
 		
 		return ResponseEntity.ok(resource);
+     
+	} 
+
+	public ResponseEntity<?> getImageFallback(Class<? extends EntityImage> entityImageClass, Object id, String sufix, Throwable e)   {
+		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
+		Resource resource = new ClassPathResource(mediaLocal.getURL(imageId).getPath());
+		return ResponseEntity.ok(resource);
 
 	}
 
-	public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String... sufix ) {
+	public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String sufix ) {
 		Map<Object, URL> urls = new HashMap<>();
 		
 		entities.forEach(entityImage -> {
@@ -77,11 +84,6 @@ public class ImageService {
 	
 
 
-	URL getURLFallback(Class<? extends EntityImage> entityImageClass, String... sufix) {
-		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-		return mediaLocal.getURL(imageId);
-
-	}
 
 
 	public Collection<Media> upload(Media media) throws MediaException {

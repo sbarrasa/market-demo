@@ -131,7 +131,7 @@ public class ProductsController {
 	@GetMapping(value=("/{id}/image"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> getImage(@PathVariable Long id) throws MediaException {
-		return imageService.getImage(Product.class, id);
+		return imageService.getImage(Product.class, id, null);
 	}
 
 	@GetMapping(value=("/{id}/thumbnail"), produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
