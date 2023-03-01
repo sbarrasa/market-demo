@@ -70,7 +70,7 @@ public class ImageService {
 
 	public ResponseEntity<?> getImageFallback(Class<? extends EntityImage> entityImageClass, Object id, String sufix, Exception e)   {
 		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-		Resource resource = new ClassPathResource("./"+imageId);
+		Resource resource = new ClassPathResource("/static/"+imageId);
 		return ResponseEntity.ok(resource);
 
 	}
@@ -91,7 +91,6 @@ public class ImageService {
 		ImageResizer images = new ImageResizer(media)
 				.setPrincipalWidth(mainWidth)
 				.setThumbnailWidth(thumbWidth);
-
 
 		return upload(images.getResizes());
 	}

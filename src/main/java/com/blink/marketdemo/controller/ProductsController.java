@@ -122,7 +122,6 @@ public class ProductsController {
 				.setStream(multipartFile.getInputStream())
 				.setContentType(multipartFile.getContentType());
 
-
 		return imageService.upload(media);
 
 		
