@@ -70,7 +70,7 @@ public class ImageService {
 
 	public ResponseEntity<?> getImageFallback(Class<? extends EntityImage> entityImageClass, Object id, String sufix, Exception e)   {
 		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-		Resource resource = new ClassPathResource(mediaLocal.getURL(imageId).getPath());
+		Resource resource = new ClassPathResource("./"+imageId);
 		return ResponseEntity.ok(resource);
 
 	}
@@ -86,9 +86,6 @@ public class ImageService {
 				
 	}
 	
-
-
-
 
 	public Collection<Media> upload(Media media) throws MediaException {
 		ImageResizer images = new ImageResizer(media)
