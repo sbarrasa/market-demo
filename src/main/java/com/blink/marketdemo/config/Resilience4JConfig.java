@@ -13,7 +13,7 @@ import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 
 @Configuration
 public class Resilience4JConfig {
-	public CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
+/*	public CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
 		    .failureRateThreshold(50)
 		    .waitDurationInOpenState(Duration.ofMillis(1000))
 		    .permittedNumberOfCallsInHalfOpenState(2)
@@ -32,5 +32,5 @@ public class Resilience4JConfig {
 												.circuitBreakerConfig(circuitBreakerConfig)
 												.build());
 	}
-	
+*/	
 }

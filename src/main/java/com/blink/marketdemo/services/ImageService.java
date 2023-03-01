@@ -55,16 +55,13 @@ public class ImageService {
 		return mediaTemplate.getURL(imageId);
 	}
 
-	public URL getValidURL(Class<? extends EntityImage> entityImageClass, Object id, String sufix) throws MediaException {
-		String imageId ;
-		imageId = EntityImage.getImageId(entityImageClass, id, sufix);
-
-		return mediaTemplate.getValidURL(imageId);
-	}
 		
 	@CircuitBreaker(name = "imageService", fallbackMethod = "getImageFallback")
 	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String sufix) throws MediaException {
-		URL url = getValidURL(entityImageClass, id, sufix);
+		String imageId  = EntityImage.getImageId(entityImageClass, id, sufix);
+
+		URL url = mediaTemplate.getValidURL(imageId);
+
 		Resource resource = new UrlResource(url);
 		
 		return ResponseEntity.ok(resource);
