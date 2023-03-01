@@ -30,7 +30,6 @@ public class CustomersController {
 	@Autowired
 	ImageService imageService;
 	
-
 	@Autowired
 	private CustomersService customersService;
 
@@ -67,7 +66,7 @@ public class CustomersController {
 	public Page<Customer> getAll(@RequestParam(required = false) Optional<Integer> page,
 			@RequestParam(required = false) Optional<Integer> size,
 			@RequestParam(required = false) List<String> orderFields) {
-
+		
 		return customersService.getPaginated(page, size, orderFields);
 
 	}

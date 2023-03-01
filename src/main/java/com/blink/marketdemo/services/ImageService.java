@@ -70,7 +70,7 @@ public class ImageService {
 
 	public ResponseEntity<?> getImageFallback(Class<? extends EntityImage> entityImageClass, Object id, String sufix, Exception e)   {
 		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-		mediaLocal.setPath("/static/");
+		
 		
 		Resource resource = new UrlResource(mediaLocal.getURL(imageId));
 		return ResponseEntity.ok(resource);

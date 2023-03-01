@@ -20,11 +20,12 @@ public class MediaConfig {
 	@Autowired
     private ApplicationContext applicationContext;
 	
+	
 	@SuppressWarnings("static-method")
 	@Bean
-	public MediaLocal mediaLocal(@Value("${com.blink.mediamanager.local.path}") String path) {
+	public MediaLocal mediaLocal() {
 		MediaLocal mediaLocal = new MediaLocal();
-		mediaLocal.setPath(path);
+		mediaLocal.setPath("/static/");
 		return mediaLocal;
 	}
 	
