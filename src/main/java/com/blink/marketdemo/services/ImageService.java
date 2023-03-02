@@ -19,6 +19,7 @@ import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
 import com.blink.mediamanager.MediaTemplate;
+import com.blink.mediamanager.local.MediaLocal;
 
 
 @Service
@@ -36,8 +37,7 @@ public class ImageService {
 	@Autowired
 	MediaTemplate mediaTemplate;
 
-	@Autowired
-	MediaTemplate mediaLocal;
+	MediaLocal mediaLocal = new MediaLocal();
 
 	public URL getURL(EntityImage entityImage) {
 		return getURL(entityImage, null);
@@ -70,7 +70,6 @@ public class ImageService {
 
 	public ResponseEntity<?> getImageFallback(Class<? extends EntityImage> entityImageClass, Object id, String sufix, Exception e)   {
 		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-		
 		
 		Resource resource = new UrlResource(mediaLocal.getURL(imageId));
 		return ResponseEntity.ok(resource);
