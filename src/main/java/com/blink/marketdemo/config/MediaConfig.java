@@ -3,6 +3,7 @@ package com.blink.marketdemo.config;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +21,14 @@ public class MediaConfig {
 	@Autowired
     private ApplicationContext applicationContext;
 	
+	@Autowired
+	private ServerProperties serverProperties;
 	
-	@SuppressWarnings("static-method")
+	
 	@Bean
 	public MediaLocal mediaLocal() {
 		MediaLocal mediaLocal = new MediaLocal();
-		mediaLocal.setPath("/static/");
+		mediaLocal.setPort(serverProperties.getPort());
 		return mediaLocal;
 	}
 	

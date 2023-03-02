@@ -8,7 +8,6 @@ import java.util.Map;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -36,45 +35,52 @@ public class ImageService {
 	
 	@Autowired
 	MediaTemplate mediaTemplate;
-
-	MediaLocal mediaLocal = new MediaLocal();
-
+	
+	@Autowired
+	MediaLocal mediaLocal;
+	
 	public URL getURL(EntityImage entityImage) {
 		return getURL(entityImage, null);
 	}
 
-	public URL getURL(EntityImage entityImage, String sufix) {
+	public URL getURL(EntityImage entityImage, String sufix)  {
 		return getURL(entityImage.getClass(), entityImage.getId(), sufix);
 		
 	}
 
+	//@CircuitBreaker(name = "imageService.getURL", fallbackMethod = "getUrlFallback")
 	public URL getURL(Class<? extends EntityImage> entityImageClass, Object id, String sufix) {
-		String imageId ;
-		imageId = EntityImage.getImageId(entityImageClass, id, sufix);
+		String imageId = EntityImage.getImageId(entityImageClass, id, sufix);
+		URL url; 
+		try {
+			url = mediaTemplate.getValidURL(imageId);
+		} catch (Throwable e) {
+			url = getUrlFallback(entityImageClass, imageId, sufix, e);
+		}
 		
-		return mediaTemplate.getURL(imageId);
+		
+		return url;
 	}
 
+	public URL getUrlFallback(Class<? extends EntityImage> entityImageClass, Object id, String sufix, Throwable e)   {
 		
-	@CircuitBreaker(name = "imageService", fallbackMethod = "getImageFallback")
-	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String sufix) throws MediaException {
-		String imageId  = EntityImage.getImageId(entityImageClass, id, sufix);
-
-		URL url = mediaTemplate.getValidURL(imageId);
-
+		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
+		
+		return mediaLocal.getURL(imageId);
+	
+	}
+	
+	
+	public ResponseEntity<?> getImage(Class<? extends EntityImage> entityImageClass, Object id, String sufix) {
+		URL url = getURL(entityImageClass, id, sufix);
+		
 		Resource resource = new UrlResource(url);
 		
 		return ResponseEntity.ok(resource);
      
 	} 
-
-	public ResponseEntity<?> getImageFallback(Class<? extends EntityImage> entityImageClass, Object id, String sufix, Exception e)   {
-		String imageId = EntityImage.getImageId(entityImageClass, DEFAULT_ID, sufix)+"."+DEFAULT_EXTENSION;
-		
-		Resource resource = new UrlResource(mediaLocal.getURL(imageId));
-		return ResponseEntity.ok(resource);
-
-	}
+	
+	
 
 	public Map<Object, URL> getURLs(Collection<? extends EntityImage> entities, String sufix ) {
 		Map<Object, URL> urls = new HashMap<>();
