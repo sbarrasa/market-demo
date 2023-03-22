@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
 import com.blink.marketdemo.entities.Customer;
 import com.blink.marketdemo.entities.Sex;
 import com.blink.marketdemo.services.CustomersService;
@@ -12,7 +11,6 @@ import com.blink.marketdemo.services.ImageService;
 import com.blink.mediamanager.ImageResizer;
 import com.blink.mediamanager.Media;
 import com.blink.mediamanager.MediaException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
